@@ -7,7 +7,10 @@
 <meta name="description" content="App de los Encuentros con Cristo · Sección de Jóvenes del Regnum Christi en Guadalajara Norte.">
 <meta name="apple-mobile-web-app-title" content="Encuentros con Cristo">
 <meta name="application-name" content="Encuentros con Cristo">
-<meta name="theme-color" content="#8B1D2C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F0F0F0">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Encuentros con Cristo">
 <meta property="og:description" content="App de los Encuentros con Cristo · Sección de Jóvenes del Regnum Christi en Guadalajara Norte.">
@@ -19,21 +22,26 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icono-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <script>
-  // Puerta de entrada: aquí no hay datos, solo el ícono y el link de la app.
-  // Desde el ícono (o con un link de la app, p. ej. ?m=nuevo) abre la app directo, con los mismos datos de siempre.
+  // Página de entrada: aquí no hay datos, solo el ícono y el link de la app.
+  // - Desde el ícono (como app, en pantalla completa): muestra la app adentro, sin la barra de script.google.com.
+  // - Con un link de la app (p. ej. ?m=nuevo) o desde un ícono que abre en el navegador: abre la app de siempre.
+  // - Si no: «Entrar a la app» y cómo poner el ícono.
   (function () {
     var APP = 'https://script.google.com/macros/s/AKfycbzo02Ats5e6OP-1wDVQwp6j3ibPp_bt7xYLtVmjyCWXd8I4Y2KvH7hqS2i1WoLm0By9/exec';
     var q = new URLSearchParams(location.search);
-    var instalar = q.has('instalar'), desdeIcono = q.get('desde') === 'icono';
-    q.delete('instalar'); q.delete('desde');
+    var instalar = q.has('instalar'), desdeIcono = q.get('desde') === 'icono', comoApp = q.has('app');
+    q.delete('instalar'); q.delete('desde'); q.delete('app');
     var resto = q.toString();
     var standalone = navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
     window.DESTINO = APP + (resto ? '?' + resto : '') + location.hash;
-    // Abierta como app desde el ícono, la app lo sabe («icono=1») y ya no le muestra «Pon el ícono en tu celular».
-    // Solo cuando de verdad está como app (no en una pestaña que se recargó o que el navegador volvió a abrir).
-    if (!instalar && standalone) q.set('icono', '1');
-    var destino = APP + (q.toString() ? '?' + q.toString() : '') + location.hash;
-    if (!instalar && (standalone || desdeIcono || resto)) { location.replace(destino); return; }
+    if (!instalar && (standalone || comoApp)) {
+      // «icono=1»: la app ya no le muestra «Pon el ícono en tu celular».
+      if (standalone) q.set('icono', '1');
+      window.EMBEBER = APP + (q.toString() ? '?' + q.toString() : '') + location.hash;
+      document.documentElement.className = 'como-app';
+      return;
+    }
+    if (!instalar && (desdeIcono || resto)) { location.replace(window.DESTINO); return; }
     // Así, el ícono que agreguen desde esta página abre la app directo.
     try { history.replaceState(null, '', location.pathname + '?desde=icono'); } catch (e) { }
   })();
@@ -67,10 +75,19 @@
   .paso span { font-size: 15px; line-height: 1.42; }
   .nota { font-size: 13.5px; color: var(--gris); margin-top: 14px; }
   .marca { position: relative; z-index: 1; background: #767676; color: #fff; text-align: center; font-size: 11px; letter-spacing: .02em; padding: 10px 16px; }
+  /* Como app (desde el ícono): solo la app, en pantalla completa. */
+  .cargando { display: none; }
+  .como-app body { background: var(--circulo); min-height: 0; overflow: hidden; }
+  .como-app .fondo, .como-app .pagina, .como-app .marca { display: none; }
+  .como-app .cargando { display: flex; position: fixed; inset: 0; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    color: var(--gris); font-size: 14px; }
+  .como-app .cargando img { width: 84px; height: 84px; border-radius: 20px; }
+  #app { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: calc(100dvh - env(safe-area-inset-bottom, 0px)); border: 0; background: transparent; z-index: 2; }
 </style>
 </head>
 <body>
 <div class="fondo" aria-hidden="true"><div class="circulo"></div></div>
+<div class="cargando" aria-live="polite"><img src="icono-180.png" alt=""><span>Abriendo la app…</span></div>
 <main class="pagina">
   <div class="vtr">¡VTR!</div>
   <img class="icono" src="icono-512.png" alt="Ícono de Encuentros con Cristo">
@@ -82,11 +99,20 @@
     <div class="paso"><span class="q">iPhone</span><span>En Safari, toca <b>Compartir</b> (el cuadro con la flecha hacia arriba) y luego <b>«Agregar a inicio»</b>.</span></div>
     <div class="paso"><span class="q">Android</span><span>En Chrome, toca el menú <b>⋮</b> y luego <b>«Agregar a la pantalla principal»</b> (o «Instalar app»).</span></div>
   </section>
-  <p class="nota">Desde el ícono se abre directo. Tus datos y tu PIN siguen igual.</p>
+  <p class="nota">Desde el ícono se abre como app, en pantalla completa. Tus datos y tu PIN siguen igual.</p>
 </main>
 <div class="marca">legionarios de cristo · consagradas · laicos consagrados · reino<br>guadalajara norte</div>
 <script>
-  (function () { var a = document.getElementById('entrar'); if (a && window.DESTINO) a.href = window.DESTINO; })();
+  (function () {
+    var a = document.getElementById('entrar'); if (a && window.DESTINO) a.href = window.DESTINO;
+    if (!window.EMBEBER) return;
+    var f = document.createElement('iframe');
+    f.id = 'app';
+    f.title = 'Encuentros con Cristo';
+    f.allow = 'clipboard-read; clipboard-write; web-share; geolocation; camera; microphone; fullscreen';
+    f.src = window.EMBEBER;
+    document.body.appendChild(f);
+  })();
 </script>
 </body>
 </html>
