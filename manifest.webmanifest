@@ -1,0 +1,16 @@
+{
+  "name": "Encuentros con Cristo",
+  "short_name": "Encuentros con Cristo",
+  "description": "App de los Encuentros con Cristo · Sección de Jóvenes del Regnum Christi en Guadalajara Norte.",
+  "lang": "es-MX",
+  "start_url": "./?desde=icono",
+  "scope": "./",
+  "display": "browser",
+  "background_color": "#8B1D2C",
+  "theme_color": "#8B1D2C",
+  "icons": [
+    { "src": "icono-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icono-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icono-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

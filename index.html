@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Encuentros con Cristo</title>
+<meta name="description" content="App de los Encuentros con Cristo · Sección de Jóvenes del Regnum Christi en Guadalajara Norte.">
+<meta name="apple-mobile-web-app-title" content="Encuentros con Cristo">
+<meta name="application-name" content="Encuentros con Cristo">
+<meta name="theme-color" content="#8B1D2C">
+<link rel="apple-touch-icon" href="icono-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icono-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icono-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<script>
+  // Puerta de entrada: aquí no hay datos, solo el ícono y el link de la app.
+  // Desde el ícono (o con un link de la app, p. ej. ?m=nuevo) abre la app directo, con los mismos datos de siempre.
+  (function () {
+    var APP = 'https://script.google.com/macros/s/AKfycbzo02Ats5e6OP-1wDVQwp6j3ibPp_bt7xYLtVmjyCWXd8I4Y2KvH7hqS2i1WoLm0By9/exec';
+    var q = new URLSearchParams(location.search);
+    var instalar = q.has('instalar'), desdeIcono = q.get('desde') === 'icono';
+    q.delete('instalar'); q.delete('desde');
+    var resto = q.toString();
+    var destino = APP + (resto ? '?' + resto : '') + location.hash;
+    var standalone = navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    window.DESTINO = destino;
+    if (!instalar && (standalone || desdeIcono || resto)) { location.replace(destino); return; }
+    // Así, el ícono que agreguen desde esta página abre la app directo.
+    try { history.replaceState(null, '', location.pathname + '?desde=icono'); } catch (e) { }
+  })();
+</script>
+<style>
+  :root { --rojo: #8B1D2C; --rojo-osc: #721622; --fondo: #E8E8E8; --circulo: #F0F0F0; --gris: #666666; --titulo-gris: #6B6B6B; --texto: #2B2B2B; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--fondo); color: var(--texto); font-family: "Helvetica Neue", Helvetica, Arial, Roboto, sans-serif; font-size: 16px; line-height: 1.45;
+    min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; position: relative; overflow-x: hidden; }
+  .fondo { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
+  .circulo { position: absolute; width: 1100px; height: 1100px; border-radius: 50%; background: var(--circulo); top: -520px; left: -560px; }
+  .pagina { position: relative; z-index: 1; width: 100%; max-width: 560px; margin: 0 auto; padding: 0 16px 30px; flex: 1 0 auto; }
+  .vtr { margin-top: 22px; color: var(--rojo); font-weight: 800; font-size: 21px; line-height: 1; letter-spacing: .02em; }
+  .vtr::after { content: ""; display: block; width: 40px; height: 3px; background: var(--rojo); margin-top: 6px; }
+  .icono { display: block; width: 112px; height: 112px; border-radius: 26px; margin-top: 30px; box-shadow: 5px 6px 0 rgba(0,0,0,.08); }
+  .sobre { margin-top: 22px; font-size: 11.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--gris); }
+  .sobre::after { content: ""; display: block; width: 32px; height: 2px; background: var(--rojo); margin-top: 7px; }
+  h1 { margin: 10px 0 0; font-weight: 800; font-size: 42px; line-height: 1.02; letter-spacing: -.02em; }
+  h1 span { display: block; }
+  h1 .r { color: var(--rojo); }
+  h1 .g { color: var(--titulo-gris); }
+  .boton { display: block; margin-top: 22px; text-align: center; text-decoration: none; border-radius: 12px; padding: 16px; font-size: 17px; font-weight: 700;
+    background: var(--rojo); color: #fff; }
+  .boton:active { background: var(--rojo-osc); }
+  .tarjeta { background: #fff; border-radius: 16px; padding: 16px; margin-top: 18px; box-shadow: 0 1px 0 rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.04); }
+  .tarjeta b.t { display: block; font-size: 16px; margin-bottom: 10px; }
+  .paso { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-top: 1px solid #E7E7E7; }
+  .paso:first-of-type { border-top: 0; padding-top: 0; }
+  .paso .q { flex: none; min-width: 72px; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--rojo); padding-top: 2px; }
+  .paso span { font-size: 15px; line-height: 1.42; }
+  .nota { font-size: 13.5px; color: var(--gris); margin-top: 14px; }
+  .marca { position: relative; z-index: 1; background: #767676; color: #fff; text-align: center; font-size: 11px; letter-spacing: .02em; padding: 10px 16px; }
+</style>
+</head>
+<body>
+<div class="fondo" aria-hidden="true"><div class="circulo"></div></div>
+<main class="pagina">
+  <div class="vtr">¡VTR!</div>
+  <img class="icono" src="icono-512.png" alt="Ícono de Encuentros con Cristo">
+  <div class="sobre">Sección de Jóvenes · RC Guadalajara Norte</div>
+  <h1><span class="r">Encuentros</span><span class="g">con Cristo</span></h1>
+  <a class="boton" id="entrar" href="https://script.google.com/macros/s/AKfycbzo02Ats5e6OP-1wDVQwp6j3ibPp_bt7xYLtVmjyCWXd8I4Y2KvH7hqS2i1WoLm0By9/exec">Entrar a la app</a>
+  <section class="tarjeta">
+    <b class="t">Pon el ícono en tu celular</b>
+    <div class="paso"><span class="q">iPhone</span><span>En Safari, toca <b>Compartir</b> (el cuadro con la flecha hacia arriba) y luego <b>«Agregar a inicio»</b>.</span></div>
+    <div class="paso"><span class="q">Android</span><span>En Chrome, toca el menú <b>⋮</b> y luego <b>«Agregar a la pantalla principal»</b> (o «Instalar app»).</span></div>
+  </section>
+  <p class="nota">Desde el ícono se abre directo. Tus datos y tu PIN siguen igual.</p>
+</main>
+<div class="marca">legionarios de cristo · consagradas · laicos consagrados · reino<br>guadalajara norte</div>
+<script>
+  (function () { var a = document.getElementById('entrar'); if (a && window.DESTINO) a.href = window.DESTINO; })();
+</script>
+</body>
+</html>
