@@ -109,7 +109,8 @@
     var f = document.createElement('iframe');
     f.id = 'app';
     f.title = 'Encuentros con Cristo';
-    f.allow = 'clipboard-read; clipboard-write; web-share; geolocation; camera; microphone; fullscreen';
+    // Solo lo que usa la app (copiar y compartir). Sin «referrerpolicy»: la app revisa que esta sea su página de entrada.
+    f.allow = 'clipboard-write; web-share; fullscreen';
     f.src = window.EMBEBER;
     document.body.appendChild(f);
   })();
