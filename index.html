@@ -27,9 +27,11 @@
     var instalar = q.has('instalar'), desdeIcono = q.get('desde') === 'icono';
     q.delete('instalar'); q.delete('desde');
     var resto = q.toString();
-    var destino = APP + (resto ? '?' + resto : '') + location.hash;
     var standalone = navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
-    window.DESTINO = destino;
+    window.DESTINO = APP + (resto ? '?' + resto : '') + location.hash;
+    // Desde el ícono, la app lo sabe («icono=1») y ya no le muestra «Pon el ícono en tu celular».
+    if (!instalar && (standalone || desdeIcono)) q.set('icono', '1');
+    var destino = APP + (q.toString() ? '?' + q.toString() : '') + location.hash;
     if (!instalar && (standalone || desdeIcono || resto)) { location.replace(destino); return; }
     // Así, el ícono que agreguen desde esta página abre la app directo.
     try { history.replaceState(null, '', location.pathname + '?desde=icono'); } catch (e) { }
