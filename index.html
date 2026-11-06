@@ -23,9 +23,9 @@
 <link rel="manifest" href="manifest.webmanifest">
 <script>
   // Página de entrada: aquí no hay datos, solo el ícono y el link de la app.
-  // - Desde el ícono (como app, en pantalla completa): muestra la app adentro, sin la barra de script.google.com.
-  // - Con un link de la app (p. ej. ?m=nuevo) o desde un ícono que abre en el navegador: abre la app de siempre.
-  // - Si no: «Entrar a la app» y cómo poner el ícono.
+  // - Desde el ícono, con un link de la app (p. ej. ?m=nuevo) o con «Entrar a la app»: muestra la app aquí adentro, en
+  //   pantalla completa, sin la barra de script.google.com (también en el navegador, no solo como app; lo pidió Brandon).
+  // - Con el link corto solo, o con «?instalar»: «Entrar a la app» y cómo poner el ícono.
   (function () {
     var APP = 'https://script.google.com/macros/s/AKfycbzo02Ats5e6OP-1wDVQwp6j3ibPp_bt7xYLtVmjyCWXd8I4Y2KvH7hqS2i1WoLm0By9/exec';
     var q = new URLSearchParams(location.search);
@@ -33,17 +33,17 @@
     q.delete('instalar'); q.delete('desde'); q.delete('app');
     var resto = q.toString();
     var standalone = navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
-    window.DESTINO = APP + (resto ? '?' + resto : '') + location.hash;
-    if (!instalar && (standalone || comoApp)) {
-      // «icono=1»: la app ya no le muestra «Pon el ícono en tu celular».
+    // Así, el ícono que agreguen desde esta página (o desde un link de la app) abre la app directo, sin abrir otra vez el link.
+    var limpia = function () { try { history.replaceState(null, '', location.pathname + '?desde=icono'); } catch (e) { } };
+    if (!instalar && (standalone || comoApp || desdeIcono || resto)) {
+      // «icono=1»: la app ya no le muestra «Pon el ícono en tu celular» (solo cuando de verdad se abre como app).
       if (standalone) q.set('icono', '1');
       window.EMBEBER = APP + (q.toString() ? '?' + q.toString() : '') + location.hash;
       document.documentElement.className = 'como-app';
+      limpia();
       return;
     }
-    if (!instalar && (desdeIcono || resto)) { location.replace(window.DESTINO); return; }
-    // Así, el ícono que agreguen desde esta página abre la app directo.
-    try { history.replaceState(null, '', location.pathname + '?desde=icono'); } catch (e) { }
+    limpia();
   })();
 </script>
 <style>
@@ -93,7 +93,7 @@
   <img class="icono" src="icono-512.png" alt="Ícono de Encuentros con Cristo">
   <div class="sobre">Sección de Jóvenes · RC Guadalajara Norte</div>
   <h1><span class="r">Encuentros</span><span class="g">con Cristo</span></h1>
-  <a class="boton" id="entrar" href="https://script.google.com/macros/s/AKfycbzo02Ats5e6OP-1wDVQwp6j3ibPp_bt7xYLtVmjyCWXd8I4Y2KvH7hqS2i1WoLm0By9/exec">Entrar a la app</a>
+  <a class="boton" id="entrar" href="./?app">Entrar a la app</a>
   <section class="tarjeta">
     <b class="t">Pon el ícono en tu celular</b>
     <div class="paso"><span class="q">iPhone</span><span>En Safari, toca <b>Compartir</b> (el cuadro con la flecha hacia arriba) y luego <b>«Agregar a inicio»</b>.</span></div>
@@ -104,7 +104,6 @@
 <div class="marca">legionarios de cristo · consagradas · laicos consagrados · reino<br>guadalajara norte</div>
 <script>
   (function () {
-    var a = document.getElementById('entrar'); if (a && window.DESTINO) a.href = window.DESTINO;
     if (!window.EMBEBER) return;
     var f = document.createElement('iframe');
     f.id = 'app';
